@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600" rel="stylesheet" type="text/css">
+        <link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet" type="text/css">
+        <link type="text/css" rel="stylesheet" href="assets/css/style.css">
+        <title>Budget Buddy</title>
+        <link rel ="icon" type="image/png" href="images/favicon-cash.png"
+    </head>
+    <body>
+        
+        <div class="top">
+
+            <!-- Logo -->
+            <div class="logo-container">
+                <img src="images/Logo.png" alt="Budget Buddy Logo">
+            </div>
+
+            <!-- Header Section -->
+            <nav>
+                <ul>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="review.html">Review</a></li>
+                </ul>
+            </nav>
+            
+            
+
+            <div class="budget">
+                <div class="budget__title">
+                    Available Budget in <span class="budget__title--month">%Month%</span>:
+                </div>
+                
+                <div class="budget__value">+ 2,345.64</div>
+                
+                <div class="budget__income clearfix">
+                    <div class="budget__income--text">Income</div>
+                    <div class="right">
+                        <div class="budget__income--value">+ 4,300.00</div>
+                        <div class="budget__income--percentage">&nbsp;</div>
+                    </div>
+                </div>
+                
+                <div class="budget__expenses clearfix">
+                    <div class="budget__expenses--text">Expenses</div>
+                    <div class="right clearfix">
+                        <div class="budget__expenses--value">- 1,954.36</div>
+                        <div class="budget__expenses--percentage">45%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="bottom">
+            <div class="add">
+                <div class="add__container">
+                    <select class="add__type">
+                        <option value="inc" selected>+</option>
+                        <option value="exp">-</option>
+                    </select>
+                    <input type="text" class="add__description" placeholder="Add description">
+                    <input type="number" class="add__value" placeholder="Value">
+                    <button class="add__btn"><i class="ion-ios-checkmark-outline"></i></button>
+                </div>
+            </div>
+            
+            <div class="container clearfix">
+                <div class="income">
+                    <h2 class="icome__title">Income</h2>
+                    
+                    <div class="income__list">
+                       
+
+                        
+                    </div>
+                </div>
+                
+                
+                
+                <div class="expenses">
+                    <h2 class="expenses__title">Expenses</h2>
+                    
+                    <div class="expenses__list">
+                       
+
+                        
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+
+        <section id="about" class="hidden-section">
+            <!-- Background Video -->
+            <video autoplay muted loop id="background-video">
+                <source src="assets/videos/expense_manager_demo.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        
+            <!-- Content Overlay -->
+            <div class="about-content">
+                <h2>About Us</h2>
+                <p>We help you track your expenses and manage your budget efficiently.</p>
+        
+                <h3>Our Developers</h3>
+                <ul>
+                    <li>Amit Shelke</li>
+                    <li>Suhani Uppal</li>
+                    <li>Gunjan Sharma</li>
+                </ul>
+        
+                <div class="media-container">
+                    <img src="images/expense_chart.jpg" alt="Expense Chart">
+                    <img src="images/budget_tracker.png" alt="Budget Tracker">
+                </div>
+            </div>
+        </section>
+        
+        
+        
+        <section id="contact" class="hidden-section">
+            <h2>Contact</h2>
+            <p>Email us at: <a href="mailto:amitshelke499@gmail.com">amitshelke499@gmail.com</a></p>
+        </section>
+        
+        <section id="review" class="hidden-section">
+            <h2>Reviews</h2>
+            <p>See what our users say about us!</p>
+        </section>
+
+        
+        <script src="assets/js/index.js"></script>
+
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const links = document.querySelectorAll(".nav-link");
+                links.forEach(link => {
+                    link.addEventListener("click", function (event) {
+                        event.preventDefault(); // Prevent default link behavior
+            
+                        const targetId = this.getAttribute("href").substring(1);
+                        const targetSection = document.getElementById(targetId);
+            
+                        // Hide all sections first
+                        document.querySelectorAll(".hidden-section").forEach(section => {
+                            section.style.display = "none";
+                        });
+            
+                        // Show the clicked section
+                        targetSection.style.display = "block";
+            
+                        // Scroll to the section smoothly
+                        targetSection.scrollIntoView({ behavior: "smooth" });
+                    });
+                });
+            });
+            </script>
+
+
+
+            <!-- Scripte to download pdf -->
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
+<script>
+function exportToPDF() {
+    const { jsPDF } = window.jspdf;
+    let doc = new jsPDF();
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("Transaction List", 10, 10);
+
+    let tableData = [];
+    document.querySelectorAll(".income__list .item, .expenses__list .item").forEach(row => {
+        let desc = row.querySelector(".item__description").innerText;
+        let value = row.querySelector(".item__value").innerText;
+        let type = value.includes("+") ? "Income" : "Expense";
+
+        tableData.push([desc, value, type]);
+    });
+
+    doc.autoTable({
+        head: [["Description", "Amount", "Type"]],
+        body: tableData,
+        startY: 20,
+        theme: "grid",
+        styles: { fontSize: 12, cellPadding: 5 }
+    });
+
+    doc.save("transactions.pdf");
+}
+</script>
+
+ 
+<button class="download-btn" onclick="exportToPDF()">
+    <img src="assets/icons/pdf-icon.png" alt="PDF" class="icon"> Download PDF
+</button>
+
+            
+
+        <!-- Footer -->
+
+        <footer>
+            <p>Project made by Amit Shelke, Suhani Uppal</p>
+            <p>&copy; 2025 Expense Manager | Contact: <a href="mailto:amitshelke499@gmail.com">amitshelke499@gmail.com</a></p>
+        </footer>
+        
+    </body>
+</html>
